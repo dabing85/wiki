@@ -2,7 +2,9 @@ package com.dabing.wiki.controller;
 
 import com.dabing.wiki.entities.Ebook;
 import com.dabing.wiki.entities.EbookExample;
+import com.dabing.wiki.req.EbookReq;
 import com.dabing.wiki.resp.CommonResp;
+import com.dabing.wiki.resp.EbookResp;
 import com.dabing.wiki.service.EbookService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +22,8 @@ public class EbookController {
     private EbookService ebookService;
 
     @GetMapping("/list")
-    public CommonResp<List<Ebook> > list(){
-        List<Ebook> list = ebookService.list();
-        return new CommonResp<List<Ebook> >(true,"",list);
+    public CommonResp<List<EbookResp> > list(EbookReq req){
+        List<EbookResp> list = ebookService.list(req);
+        return new CommonResp<>(true,"",list);
     }
 }
