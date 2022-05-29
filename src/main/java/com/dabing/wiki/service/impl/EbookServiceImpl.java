@@ -6,6 +6,7 @@ import com.dabing.wiki.mapper.EbookMapper;
 import com.dabing.wiki.req.EbookReq;
 import com.dabing.wiki.resp.EbookResp;
 import com.dabing.wiki.service.EbookService;
+import com.dabing.wiki.util.CopyUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +26,14 @@ public class EbookServiceImpl implements EbookService {
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         criteria.andNameLike("%"+req.getName()+"%");
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
-        List<EbookResp> ebookRespList = new ArrayList<>();
+        /*List<EbookResp> ebookRespList = new ArrayList<>();
         //将Ebook转成EbookResp
         for (Ebook ebook : ebookList) {
             EbookResp ebookResp = new EbookResp();
             BeanUtils.copyProperties(ebook,ebookResp);  //用工具类，实现从ebook的值复制到ebookResp
             ebookRespList.add(ebookResp);
-        }
-        return ebookRespList;
+        }*/
+        List<EbookResp> respList = CopyUtil.copyList(ebookList, EbookResp.class);
+        return respList;
     }
 }
