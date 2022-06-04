@@ -101,7 +101,7 @@ export default defineComponent({
     //页面渲染后数据加载
     onMounted(()=>{
       console.log("onMounted");
-      axios.get(process.env.VUE_APP_SERVER+"/ebook/list?").then((response)=>{
+      axios.get("/ebook/list?").then((response)=>{
         const date = response.data;
         ebooks.value=date.date;
         ebooks1.books = date.date;
