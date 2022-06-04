@@ -86,7 +86,6 @@
 
 <script lang="ts">
 import { defineComponent ,onMounted, reactive, ref, toRef} from 'vue';
-import { StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons-vue';
 import axios from "axios";
 
 const listData: Record<string, string>[] = [];
@@ -105,11 +104,6 @@ for (let i = 0; i < 23; i++) {
 
 export default defineComponent({
   name: 'Home',
-  components:{  //引入收藏、点赞、留言图标
-    StarOutlined,
-    LikeOutlined,
-    MessageOutlined,
-  },
   setup(){
     console.log("setup");
     const ebooks=ref();
