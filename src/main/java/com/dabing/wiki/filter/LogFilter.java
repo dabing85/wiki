@@ -27,7 +27,7 @@ package com.dabing.wiki.filter;
          LOG.info("远程地址: {}", request.getRemoteAddr());
 
          long startTime = System.currentTimeMillis();
-         filterChain.doFilter(servletRequest, servletResponse);
+         filterChain.doFilter(servletRequest, servletResponse);//这里执行业务方法
          LOG.info("------------- LogFilter 结束 耗时：{} ms -------------", System.currentTimeMillis() - startTime);
      }
  }
