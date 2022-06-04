@@ -92,7 +92,6 @@ for (let i = 0; i < 23; i++) {
 export default defineComponent({
   name: 'Home',
   setup(){
-    console.log("setup");
     const ebooks=ref();
     const ebooks1=reactive({
       books:[]
@@ -100,12 +99,10 @@ export default defineComponent({
 
     //页面渲染后数据加载
     onMounted(()=>{
-      console.log("onMounted");
       axios.get("/ebook/list?").then((response)=>{
         const date = response.data;
         ebooks.value=date.date;
         ebooks1.books = date.date;
-        console.log(response);
       });
     });
 
