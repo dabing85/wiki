@@ -48,35 +48,22 @@
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="listData">
-        <template #footer>
-          <div>
-            <b>ant design vue</b>
-            footer part
-          </div>
-        </template>
+      <a-list item-layout="vertical" size="large" :grid="{ gutter: 16, column: 3 }" :pagination="pagination" :data-source="ebooks">
+        <!--    这个item就是ebooks数组里的一个一个数据，用item.xxx访问数据    -->
         <template #renderItem="{ item }">
-          <a-list-item key="item.title">
+          <a-list-item key="item.name">
             <template #actions>
-          <span v-for="{ type, text } in actions" :key="type">
-            <component :is="type" style="margin-right: 8px" />
-            {{ text }}
-          </span>
-            </template>
-            <template #extra>
-              <img
-                  width="272"
-                  alt="logo"
-                  src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-              />
+              <span v-for="{ type, text } in actions" :key="type">
+                <component :is="type" style="margin-right: 8px" />
+                {{ text }}
+              </span>
             </template>
             <a-list-item-meta :description="item.description">
               <template #title>
-                <a :href="item.href">{{ item.title }}</a>
+                <a :href="item.href">{{ item.name }}</a>
               </template>
-              <template #avatar><a-avatar :src="item.avatar" /></template>
+              <template #avatar><a-avatar :src="item.cover" /></template>
             </a-list-item-meta>
-            {{ item.content }}
           </a-list-item>
         </template>
       </a-list>
@@ -114,7 +101,7 @@ export default defineComponent({
     //页面渲染后数据加载
     onMounted(()=>{
       console.log("onMounted");
-      axios.get("http://localhost:8081/ebook/list?name=Spring").then((response)=>{
+      axios.get("http://localhost:8081/ebook/list?name=入门教程").then((response)=>{
         const date = response.data;
         ebooks.value=date.date;
         ebooks1.books = date.date;
