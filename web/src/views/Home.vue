@@ -48,7 +48,7 @@
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      <a-list item-layout="vertical" size="large" :grid="{ gutter: 16, column: 3 }" :pagination="pagination" :data-source="ebooks">
+      <a-list item-layout="vertical" size="large" :grid="{ gutter: 16, column: 3 }"  :data-source="ebooks">
         <!--    这个item就是ebooks数组里的一个一个数据，用item.xxx访问数据    -->
         <template #renderItem="{ item }">
           <a-list-item key="item.name">
@@ -101,7 +101,7 @@ export default defineComponent({
     //页面渲染后数据加载
     onMounted(()=>{
       console.log("onMounted");
-      axios.get("http://localhost:8081/ebook/list?name=入门教程").then((response)=>{
+      axios.get("http://localhost:8081/ebook/list?").then((response)=>{
         const date = response.data;
         ebooks.value=date.date;
         ebooks1.books = date.date;
@@ -110,12 +110,12 @@ export default defineComponent({
     });
 
     //分页
-    const pagination = {
+   /* const pagination = {
       onChange: (page: number) => {
         console.log(page);
       },
       pageSize: 3,
-    };
+    };*/
 
     //收藏数、点赞数、留言数
     const actions: Record<string, string>[] = [
@@ -129,7 +129,6 @@ export default defineComponent({
       ebooks,
       ebooks2: toRef(ebooks1,"books"),
       listData,
-      pagination,
       actions
     }
 
@@ -137,3 +136,13 @@ export default defineComponent({
 
 });
 </script>
+
+<style scoped>
+.ant-avatar {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  border-radius: 8%;
+  margin: 5px 0;
+}
+</style>
