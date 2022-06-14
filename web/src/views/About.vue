@@ -1,5 +1,8 @@
 <template>
-  <div class="about">
-    <h1>关于我们</h1>
-  </div>
+  <a-space>
+    <smile-two-tone />
+    <heart-two-tone two-tone-color="#eb2f96" />
+    <check-circle-two-tone two-tone-color="#52c41a" />
+  </a-space>
 </template>
+
