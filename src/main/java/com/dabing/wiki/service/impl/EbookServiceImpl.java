@@ -5,19 +5,17 @@ import com.dabing.wiki.entities.EbookExample;
 import com.dabing.wiki.mapper.EbookMapper;
 import com.dabing.wiki.req.EbookReq;
 import com.dabing.wiki.resp.EbookResp;
+import com.dabing.wiki.resp.PageResp;
 import com.dabing.wiki.service.EbookService;
 import com.dabing.wiki.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.mysql.cj.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,13 +26,14 @@ public class EbookServiceImpl implements EbookService {
     private EbookMapper ebookMapper;
 
     @Override
-    public List<EbookResp> list(EbookReq req) {
+    public PageResp<EbookResp> list(EbookReq req) {
         EbookExample ebookExample=new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if(!ObjectUtils.isEmpty(req.getName())){  //如果传入的参数name不为空才进行name模糊查询
             criteria.andNameLike("%"+req.getName()+"%");
         }
-        PageHelper.startPage(1,4); //光这一句就能实现分页的效果了
+        PageHelper.startPage(req.getPage(),req.getSize()); //光这一句就能实现分页的效果了
+        //将页面和行数改成了动态的了
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
 
         //一些分页的信息
@@ -50,6 +49,9 @@ public class EbookServiceImpl implements EbookService {
             ebookRespList.add(ebookResp);
         }*/
         List<EbookResp> respList = CopyUtil.copyList(ebookList, EbookResp.class);
-        return respList;
+        PageResp<EbookResp> pageResp=new PageResp<>();
+        pageResp.setTotal(pageInfo.getTotal());
+        pageResp.setList(respList);
+        return pageResp;
     }
 }

@@ -1,12 +1,9 @@
 package com.dabing.wiki.service;
 
-import com.dabing.wiki.entities.Ebook;
 import com.dabing.wiki.req.EbookReq;
 import com.dabing.wiki.resp.EbookResp;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import com.dabing.wiki.resp.PageResp;
 
 public interface EbookService {
-    List<EbookResp> list(EbookReq ebookReq);
+    PageResp<EbookResp> list(EbookReq ebookReq);
 }
