@@ -7,7 +7,11 @@ import com.dabing.wiki.req.EbookReq;
 import com.dabing.wiki.resp.EbookResp;
 import com.dabing.wiki.service.EbookService;
 import com.dabing.wiki.util.CopyUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mysql.cj.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -18,6 +22,7 @@ import java.util.List;
 
 @Service
 public class EbookServiceImpl implements EbookService {
+    private static final Logger LOG = LoggerFactory.getLogger(EbookServiceImpl.class);
 
     @Resource
     private EbookMapper ebookMapper;
@@ -29,7 +34,14 @@ public class EbookServiceImpl implements EbookService {
         if(!ObjectUtils.isEmpty(req.getName())){  //如果传入的参数name不为空才进行name模糊查询
             criteria.andNameLike("%"+req.getName()+"%");
         }
+        PageHelper.startPage(1,4); //光这一句就能实现分页的效果了
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
+
+        //一些分页的信息
+        PageInfo<Ebook> pageInfo=new PageInfo<>(ebookList);
+        LOG.info("总记录数:{}",pageInfo.getTotal());
+        LOG.info("总页数:{}",pageInfo.getPages());
+
         /*List<EbookResp> ebookRespList = new ArrayList<>();
         //将Ebook转成EbookResp
         for (Ebook ebook : ebookList) {
