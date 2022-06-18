@@ -85,10 +85,15 @@ export default defineComponent({
 
     //页面渲染后数据加载
     onMounted(()=>{
-      axios.get("/ebook/list?").then((response)=>{
+      axios.get("/ebook/list",{
+        params:{
+          page:1,
+          size:1000
+        }
+      }).then((response)=>{
         const date = response.data;
-        ebooks.value=date.date;
-        ebooks1.books = date.date;
+        ebooks.value=date.date.list;
+        ebooks1.books = date.date.list;
       });
     });
 
