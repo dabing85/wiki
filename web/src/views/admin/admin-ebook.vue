@@ -12,17 +12,28 @@
         <template #cover="{ text: cover }">
           <img v-if="cover" :src="cover" alt="avatar" />
         </template>
+        <template v-slot:action="{ text,record }">
           <a-space size="small">
-            <a-button type="primary">
+            <a-button type="primary" @click="edit">
               编辑
             </a-button>
             <a-button type="danger">
               删除
             </a-button>
           </a-space>
+        </template >
       </a-table>
     </a-layout-content>
   </a-layout>
+
+  <a-modal
+      v-model:visible="modalVisible"
+      title="电子书表单"
+      :confirm-loading="modalLoading"
+      @ok="handleModalOk"
+  >
+    <p>{{ modalText }}</p>
+  </a-modal>
 
 </template>
 
@@ -45,7 +56,7 @@ export default defineComponent({
       {
         title: '封面',
         dataIndex: 'cover',
-        slots: { customRender: 'cover'}
+        slots: { customRender: 'cover' ,bodyCell:''}
       },
       {
         title: '名称',
@@ -106,6 +117,27 @@ export default defineComponent({
       });
     };
 
+    //---------表单--------------
+    const modalText = ref<string>('Content of the modal');
+    const modalVisible = ref<boolean>(false);
+    const modalLoading = ref<boolean>(false);
+
+    /**
+     * 编辑
+     */
+    const edit = () => {
+      modalVisible.value = true;
+    };
+
+    const handleModalOk = () => {
+      modalText.value = '这个模态框将在2秒后关闭';
+      modalLoading.value = true;  //表示有加载效果
+      setTimeout(() => {
+        modalVisible.value = false;
+        modalLoading.value = false;
+      }, 2000);
+    };
+
     //刚上来的页面渲染，从第一页开始
     onMounted(() => {
       handleQuery({
@@ -120,6 +152,13 @@ export default defineComponent({
       columns,
       loading,
       handleTableChange,
+
+      //表单
+      modalText,
+      modalVisible,
+      modalLoading,
+      edit,
+      handleModalOk,
     }
   }
 });
