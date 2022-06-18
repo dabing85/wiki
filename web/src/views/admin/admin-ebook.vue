@@ -79,13 +79,19 @@ export default defineComponent({
      */
     const handleQuery=(param:any)=>{
       loading.value=true;
-      axios.get("/ebook/list",param).then((response)=>{
+      axios.get("/ebook/list", {
+        params: {
+          page: param.page,
+          size: param.size
+        }
+      }).then((response)=>{
         loading.value=false;
         const date=response.data;
-        ebooks.value=date.date;
+        ebooks.value=date.date.list;
 
         //重置分页按钮
         pagination.value.current=param.page;
+        pagination.value.total=date.date.total;
       })
     }
 
@@ -99,8 +105,13 @@ export default defineComponent({
         size:pagination.pageSize
       });
     };
+
+    //刚上来的页面渲染，从第一页开始
     onMounted(() => {
-      handleQuery({});
+      handleQuery({
+        page:1,
+        size:pagination.value.pageSize
+      });
     });
 
     return {
