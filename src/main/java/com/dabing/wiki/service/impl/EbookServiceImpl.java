@@ -3,8 +3,9 @@ package com.dabing.wiki.service.impl;
 import com.dabing.wiki.entities.Ebook;
 import com.dabing.wiki.entities.EbookExample;
 import com.dabing.wiki.mapper.EbookMapper;
-import com.dabing.wiki.req.EbookReq;
-import com.dabing.wiki.resp.EbookResp;
+import com.dabing.wiki.req.EbookQueryReq;
+import com.dabing.wiki.req.EbookSaveReq;
+import com.dabing.wiki.resp.EbookQueryResp;
 import com.dabing.wiki.resp.PageResp;
 import com.dabing.wiki.service.EbookService;
 import com.dabing.wiki.util.CopyUtil;
@@ -26,7 +27,7 @@ public class EbookServiceImpl implements EbookService {
     private EbookMapper ebookMapper;
 
     @Override
-    public PageResp<EbookResp> list(EbookReq req) {
+    public PageResp<EbookQueryResp> list(EbookQueryReq req) {
         EbookExample ebookExample=new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if(!ObjectUtils.isEmpty(req.getName())){  //如果传入的参数name不为空才进行name模糊查询
@@ -48,10 +49,29 @@ public class EbookServiceImpl implements EbookService {
             BeanUtils.copyProperties(ebook,ebookResp);  //用工具类，实现从ebook的值复制到ebookResp
             ebookRespList.add(ebookResp);
         }*/
-        List<EbookResp> respList = CopyUtil.copyList(ebookList, EbookResp.class);
-        PageResp<EbookResp> pageResp=new PageResp<>();
+        List<EbookQueryResp> respList = CopyUtil.copyList(ebookList, EbookQueryResp.class);
+        PageResp<EbookQueryResp> pageResp=new PageResp<>();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(respList);
         return pageResp;
+    }
+
+    /**
+     * 如果传入id有值为更新操作，如果无值为新增操作
+     * @param ebookSaveReq
+     * @return
+     */
+    @Override
+    public int save(EbookSaveReq ebookSaveReq) {
+        int res=0;
+        Ebook ebook=CopyUtil.copy(ebookSaveReq,Ebook.class);
+        if(ObjectUtils.isEmpty(ebookSaveReq.getId())){
+            //新增
+            res=ebookMapper.insert(ebook);
+        }else{
+            //更新
+            res=ebookMapper.updateByPrimaryKey(ebook);
+        }
+        return res;
     }
 }

@@ -1,19 +1,14 @@
 package com.dabing.wiki.controller;
 
-import com.dabing.wiki.entities.Ebook;
-import com.dabing.wiki.entities.EbookExample;
-import com.dabing.wiki.req.EbookReq;
+import com.dabing.wiki.req.EbookQueryReq;
+import com.dabing.wiki.req.EbookSaveReq;
 import com.dabing.wiki.resp.CommonResp;
-import com.dabing.wiki.resp.EbookResp;
+import com.dabing.wiki.resp.EbookQueryResp;
 import com.dabing.wiki.resp.PageResp;
 import com.dabing.wiki.service.EbookService;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @RestController
 @RequestMapping("/ebook")
@@ -23,8 +18,16 @@ public class EbookController {
     private EbookService ebookService;
 
     @GetMapping("/list")
-    public CommonResp<PageResp<EbookResp>> list(EbookReq req){
-        PageResp<EbookResp> pageResp = ebookService.list(req);
+    public CommonResp<PageResp<EbookQueryResp>> list(EbookQueryReq req){
+        PageResp<EbookQueryResp> pageResp = ebookService.list(req);
         return new CommonResp<>(true,"",pageResp);
+    }
+
+    @PostMapping("/save")
+    public CommonResp save(@RequestBody EbookSaveReq req){
+        int res = ebookService.save(req);
+        CommonResp commonResp=new CommonResp();
+        commonResp.setDate(res);
+        return commonResp;
     }
 }

@@ -1,6 +1,6 @@
-package com.dabing.wiki.resp;
+package com.dabing.wiki.req;
 
-public class EbookResp {
+public class EbookSaveReq {
     private Long id;
 
     private String name;

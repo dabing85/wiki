@@ -17,4 +17,8 @@ public class CommonResp<T> {
         this.message = message;
         this.date = date;
     }
+
+    public CommonResp() {
+    }
+
 }

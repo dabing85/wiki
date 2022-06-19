@@ -46,7 +46,7 @@
         <a-input v-model:value="ebook.category2Id" />
       </a-form-item>
       <a-form-item label="描述">
-        <a-input v-model:value="ebook.desc" />
+        <a-input v-model:value="ebook.description" />
       </a-form-item>
 
     </a-form>
@@ -135,7 +135,6 @@ export default defineComponent({
     };
 
     //---------表单--------------
-    const modalText = ref<string>('Content of the modal');
     const modalVisible = ref<boolean>(false);
     const modalLoading = ref<boolean>(false);
     const ebook = ref({});
@@ -149,12 +148,20 @@ export default defineComponent({
     };
 
     const handleModalOk = () => {
-      modalText.value = '这个模态框将在2秒后关闭';
       modalLoading.value = true;  //表示有加载效果
-      setTimeout(() => {
-        modalVisible.value = false;
-        modalLoading.value = false;
-      }, 2000);
+      axios.post("/ebook/save", ebook.value).then((response)=>{
+        const date=response.data;  //data等于CommonResp
+        if(date.success){
+          modalVisible.value = false;
+          modalLoading.value = false;
+
+          //重新加载列表
+          handleQuery({
+            page: pagination.value.current,
+            size: pagination.value.pageSize,
+          })
+        }
+      });
     };
 
     //刚上来的页面渲染，从第一页开始
@@ -173,7 +180,6 @@ export default defineComponent({
       handleTableChange,
 
       //表单
-      modalText,
       modalVisible,
       modalLoading,
       edit,

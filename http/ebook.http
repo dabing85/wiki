@@ -3,3 +3,15 @@ GET http://localhost:8081/ebook/list?name=Spring
 ###
 
 GET http://localhost:8081/ebook/list?page=1&size=2
+
+###
+
+POST http://localhost:8081/ebook/save
+Content-Type: application/json
+
+{}
+
+###
+
+POST http://localhost:80/api/item
+Content-Type: application/x-www-form-urlencoded
