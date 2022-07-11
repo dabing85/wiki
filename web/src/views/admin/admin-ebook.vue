@@ -1,6 +1,15 @@
 <template>
   <a-layout>
     <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
+      <p>
+        <a-form layout="inline" :model="param">
+          <a-form-item>
+            <a-button type="primary" @click="add()">
+              新增
+            </a-button>
+          </a-form-item>
+        </a-form>
+      </p>
       <a-table
           :columns="columns"
           :row-key="record => record.id"
@@ -73,7 +82,7 @@ export default defineComponent({
       {
         title: '封面',
         dataIndex: 'cover',
-        slots: { customRender: 'cover' ,bodyCell:''}
+        slots: { customRender: 'cover' }
       },
       {
         title: '名称',
@@ -147,6 +156,14 @@ export default defineComponent({
       ebook.value=record;
     };
 
+    /**
+     * 新增
+     */
+    const add = () => {
+      modalVisible.value = true;
+      ebook.value= {};
+    };
+
     const handleModalOk = () => {
       modalLoading.value = true;  //表示有加载效果
       axios.post("/ebook/save", ebook.value).then((response)=>{
@@ -183,6 +200,7 @@ export default defineComponent({
       modalVisible,
       modalLoading,
       edit,
+      add,
       handleModalOk,
       ebook
     }

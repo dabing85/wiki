@@ -9,6 +9,7 @@ import com.dabing.wiki.resp.EbookQueryResp;
 import com.dabing.wiki.resp.PageResp;
 import com.dabing.wiki.service.EbookService;
 import com.dabing.wiki.util.CopyUtil;
+import com.dabing.wiki.util.SnowFlake;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -25,6 +26,9 @@ public class EbookServiceImpl implements EbookService {
 
     @Resource
     private EbookMapper ebookMapper;
+    @Resource
+    private SnowFlake snowFlake;
+
 
     @Override
     public PageResp<EbookQueryResp> list(EbookQueryReq req) {
@@ -67,6 +71,7 @@ public class EbookServiceImpl implements EbookService {
         Ebook ebook=CopyUtil.copy(ebookSaveReq,Ebook.class);
         if(ObjectUtils.isEmpty(ebookSaveReq.getId())){
             //新增
+            ebook.setId(snowFlake.nextId());
             res=ebookMapper.insert(ebook);
         }else{
             //更新
